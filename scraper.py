@@ -27,7 +27,7 @@ def extract_next_links(url, resp):
             print(f"Error: {resp.error}")
             return [] #return an empty list  
         soup_content = BeautifulSoup(resp.raw_response.content, "lxml") #Should use lxml by default as long as lxml is installed in environment.
-        if (is_high_quality_page(soup_content)): #check if page has lots of info or little
+        if (is_high_quality_page(soup_content) and is_valid(url)): #check if page has lots of info or little and valid url
             for hyperlink in soup_content.find_all('a'): #get all the a tags inside html document
                 hyperlink_href = hyperlink.get('href') #get out the link
                 if (is_valid(hyperlink_href) and hyperlink_href != resp.url): #see if each link within the url is valid and not the same as link above
@@ -57,8 +57,6 @@ def is_valid(url):
             return False
         if (is_trap(url)): #is_trap returns true if it is a trap
             return False
-        if not(correct_domain(url)): #correct_domain returns true if domain is from the ones listed
-            return False
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
             + r"|png|tiff?|mid|mp2|mp3|mp4"
@@ -75,20 +73,11 @@ def is_valid(url):
 
 
 def is_trap(url):
-    known_traps = ["https://wics.ics.uci.edu/events", "ppsx"] #list of traps we found whilst running crawler
+    known_traps = ["https://wics.ics.uci.edu/events", "/ppsx", "/pdf", "share="] #list of traps we found whilst running crawler
     for trap in known_traps:
         if (trap in url): #if the traps are included inside the url, then we can assume it is a trap
             return True
     return False
-
-
-def correct_domain(url):
-    valid_domains = ["ics.uci.edu", "cs.uci.edu", "informatics.uci.edu", "stat.uci.edu"] #all valid domains
-    for domain in valid_domains: #loops through each domain to see if the url contains it
-        if domain in url:
-            return True
-    return False
-
 
 def is_high_quality_page(soup_content):
     bad_count = 100  # Minimum number of words for "low textual content" pages
