@@ -3,14 +3,21 @@ from collections import defaultdict
 from bs4 import BeautifulSoup
 
 
-def tokenize(soup_content):
-    #gets all the text from the html page and gets rid of all punctuation except for ' and -
-    html_text = re.sub(r'[^\w\'-]+', ' ', soup_content.get_text()) #got the regex formula using ChatGPT
-    html_text = re.sub(r'[^\w]+', ' ', html_text) #gets rid of all non alphanumeric
-    html_text = html_text.replace("-", " ") #gets rid of the hyphen
-    html_text = html_text.lower() #make everything lowercase
-    text_list = html_text.split() #puts all the words into a list
-    return text_list
+# returns a list of all words i.e. sequences of alphanumeric characters
+# with apostrophes within the word, but not at either of the ends
+def tokenize2(soup_content):
+    # get all the text from the html page
+    # and make it lowercase
+    html_text = soup_content.get_text().lower()
+    # this takes out non-word characters everything except
+    # sequences of alphanumeric characters and apostrophes
+    html_text = re.sub(r'[^a-z0-9\']+', ' ', html_text)
+    # this takes out apostrophes which aren't surrounded by
+    # alphanumeric characters on at least one side because I figure
+    # those are not actually "in" the words
+    html_text = re.sub(r'([^a-z0-9]\'|\'[^a-z0-9])', ' ', html_text)
+    # puts all the words into a list
+    return html_text.split()
 
 
 def compute_word_frequencies(token_list):
