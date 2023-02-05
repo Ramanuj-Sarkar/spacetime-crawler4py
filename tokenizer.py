@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 # returns a list of all words i.e. sequences of alphanumeric characters
 # with apostrophes within the word, but not at either of the ends
-def tokenize2(soup_content):
+def tokenize(soup_content):
     # get all the text from the html page
     # and make it lowercase
     html_text = soup_content.get_text().lower()
