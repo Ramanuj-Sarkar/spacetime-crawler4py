@@ -33,7 +33,7 @@ def extract_next_links(url, resp):
             return [] #return an empty list  
         soup_content = BeautifulSoup(resp.raw_response.content.decode("utf-8", "ignore"), "lxml") #Should use lxml by default as long as lxml is installed in environment.
         is_quality = is_high_quality_page(soup_content)
-        if (is_quality[0] and is_valid(url)): #check if page has lots of info or little and valid url
+        if (is_quality[0]): #check if page has lots of info or little and valid url
             frequencies = frequencies | is_quality[1]   #combines new frequency dict with preexisting one
             totalWords = sum(is_quality[1].values())   #gets the sum of all the words in a single page
             if(totalWords > most_words[1]):      #checks if new page has more words than current max
