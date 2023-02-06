@@ -42,5 +42,14 @@ def token_print(frequencies):
         print(key, value, sep=' - ')
 
 
+def write_data(file_name, frequencies, most_words):
+    f = open(file_name, "w")
+    double_sorted = sorted(sorted(frequencies.items(), key=(lambda x: x[0])), key=(lambda x: x[1]), reverse=True)
+    for key, value in double_sorted[:50]:
+        f.write(key, value, sep=' - ')
+    f.write(most_words)
+    f.close()
+
+
 if __name__ == '__main__':
     token_print(compute_word_frequencies(tokenize('<p>This is a test</p>')))

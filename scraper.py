@@ -3,6 +3,8 @@ import lxml
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import tokenizer
+from collections import defaultdict
+
 
 
 def scraper(url, resp):
@@ -22,12 +24,20 @@ def extract_next_links(url, resp):
     #         resp.raw_response.content: the content of the page!
     # Return a list with the hyperlinks (as strings) scrapped from resp.raw_response.content
     links = []
+    frequencies = defaultdict(int)
+    most_words = ("", 0)
+
     try: #catch any errors from urls
         if not(resp.status >= 200 and resp.status < 300 and resp.raw_response): #http status 200-299 is successful
             print(f"Error: {resp.error}")
             return [] #return an empty list  
         soup_content = BeautifulSoup(resp.raw_response.content, "lxml") #Should use lxml by default as long as lxml is installed in environment.
-        if (is_high_quality_page(soup_content) and is_valid(url)): #check if page has lots of info or little and valid url
+        is_quality = is_high_quality_page(soup_content)
+        if (is_quality[0] and is_valid(url)): #check if page has lots of info or little and valid url
+            frequencies = frequencies | is_quality[1]   #combines new frequency dict with preexisting one
+            totalWords = sum(is_quality[1].values())   #gets the sum of all the words in a single page
+            if(totalWords > most_words[1]):      #checks if new page has more words than current max
+                most_words = (soup_content, totalWords)   #replaces most_words with new page if it has more words
             for hyperlink in soup_content.find_all('a'): #get all the a tags inside html document
                 hyperlink_href = hyperlink.get('href') #get out the link
                 if (is_valid(hyperlink_href) and hyperlink_href != resp.url): #see if each link within the url is valid and not the same as link above
@@ -35,6 +45,8 @@ def extract_next_links(url, resp):
                         hyperlink_href = hyperlink_href[:hyperlink_href.find("#")]
                     links.append(hyperlink_href) #add to list to be added to fronteir later
         else: return []
+        
+        tokenizer.write_data(":/home/everetc/assignment2/data.txt", frequencies, most_words)    #writes data of word frequencies and page with most words into a txt file
 
         return links
     except:
@@ -82,8 +94,8 @@ def is_trap(url):
 def is_high_quality_page(soup_content):
     bad_count = 100  # Minimum number of words for "low textual content" pages
     #get the html content and turns into a token list
-    token_dict = tokenizer.compute_word_frequencies(tokenizer.tokenize(soup_content))
+    token_dict = tokenizer.compute_word_frequencies(tokenizer.tokenize(soup_content))   #
     token_sum = sum(list(token_dict.values()))
     if (token_sum <= bad_count): #see the quality count
         return False
-    return True
+    return True, token_dict
