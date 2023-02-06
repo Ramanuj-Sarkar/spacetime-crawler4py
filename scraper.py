@@ -32,10 +32,10 @@ def extract_next_links(url, resp):
             print(f"Error: {resp.error}")
             return [] #return an empty list  
         soup_content = BeautifulSoup(resp.raw_response.content.decode("utf-8", "ignore"), "lxml") #Should use lxml by default as long as lxml is installed in environment.
-        is_quality = is_high_quality_page(soup_content)
-        if (is_quality[0]): #check if page has lots of info or little and valid url
-            frequencies = frequencies | is_quality[1]   #combines new frequency dict with preexisting one
-            totalWords = sum(is_quality[1].values())   #gets the sum of all the words in a single page
+        if (is_high_quality_page(soup_content)): #check if page has lots of info or little and valid url
+            token_dict = tokenizer.compute_word_frequencies(tokenizer.tokenize(soup_content))
+            frequencies = frequencies | token_dict   #combines new frequency dict with preexisting one
+            totalWords = sum(token_dict.values())   #gets the sum of all the words in a single page
             if(totalWords > most_words[1]):      #checks if new page has more words than current max
                 most_words = (soup_content, totalWords)   #replaces most_words with new page if it has more words
             for hyperlink in soup_content.find_all('a'): #get all the a tags inside html document
