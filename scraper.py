@@ -73,7 +73,7 @@ def is_valid(url):
 
 
 def is_trap(url):
-    known_traps = ["https://wics.ics.uci.edu/events", "/ppsx", "/pdf", "share="] #list of traps we found whilst running crawler
+    known_traps = ["https://wics.ics.uci.edu/events", "\.ppsx", "\.pdf", "share="] #list of traps we found whilst running crawler
     for trap in known_traps:
         if (trap in url): #if the traps are included inside the url, then we can assume it is a trap
             return True
