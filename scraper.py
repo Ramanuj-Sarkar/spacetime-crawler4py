@@ -26,7 +26,7 @@ def extract_next_links(url, resp):
         if not(resp.status >= 200 and resp.status < 300 and resp.raw_response): #http status 200-299 is successful
             print(f"Error: {resp.error}")
             return [] #return an empty list  
-        soup_content = BeautifulSoup(resp.raw_response.content, "lxml") #Should use lxml by default as long as lxml is installed in environment.
+        soup_content = BeautifulSoup(resp.raw_response.content.decode("utf-8", "ignore"), "lxml") #Should use lxml by default as long as lxml is installed in environment.
         if (is_high_quality_page(soup_content) and is_valid(url)): #check if page has lots of info or little and valid url
             for hyperlink in soup_content.find_all('a'): #get all the a tags inside html document
                 hyperlink_href = hyperlink.get('href') #get out the link
