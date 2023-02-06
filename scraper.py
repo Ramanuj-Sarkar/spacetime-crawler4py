@@ -31,7 +31,7 @@ def extract_next_links(url, resp):
         if not(resp.status >= 200 and resp.status < 300 and resp.raw_response): #http status 200-299 is successful
             print(f"Error: {resp.error}")
             return [] #return an empty list  
-        soup_content = BeautifulSoup(resp.raw_response.content, "lxml") #Should use lxml by default as long as lxml is installed in environment.
+        soup_content = BeautifulSoup(resp.raw_response.content.decode("utf-8", "ignore"), "lxml") #Should use lxml by default as long as lxml is installed in environment.
         is_quality = is_high_quality_page(soup_content)
         if (is_quality[0] and is_valid(url)): #check if page has lots of info or little and valid url
             frequencies = frequencies | is_quality[1]   #combines new frequency dict with preexisting one
@@ -82,6 +82,7 @@ def is_valid(url):
     except TypeError:
         print("TypeError for ", parsed)
         raise
+
 
 
 def is_trap(url):
