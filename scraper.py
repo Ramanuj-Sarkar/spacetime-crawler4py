@@ -99,4 +99,4 @@ def is_high_quality_page(soup_content):
     token_sum = sum(list(token_dict.values()))
     if (token_sum <= bad_count): #see the quality count
         return False
-    return True, token_dict
+    return True
