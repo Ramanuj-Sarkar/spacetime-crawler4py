@@ -50,7 +50,7 @@ def write_data(file_name, frequencies, most_words):
         #f.write(key, value, sep=' - ')
     print("This is the website with the most words: " + most_words)
     #f.write("This is the website with the most words: " + most_words)
-    f.close()
+    #f.close()
 
 
 if __name__ == '__main__':

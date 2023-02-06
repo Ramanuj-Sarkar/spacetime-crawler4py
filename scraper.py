@@ -46,7 +46,7 @@ def extract_next_links(url, resp):
                     links.append(hyperlink_href) #add to list to be added to fronteir later
         else: return []
         
-        tokenizer.write_data("report.txt", frequencies, most_words)    #writes data of word frequencies and page with most words into a txt file
+        #tokenizer.write_data("report.txt", frequencies, most_words)    #writes data of word frequencies and page with most words into a txt file
 
         return links
     except:
