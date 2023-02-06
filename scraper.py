@@ -27,7 +27,7 @@ def extract_next_links(url, resp):
             print(f"Error: {resp.error}")
             return [] #return an empty list  
         soup_content = BeautifulSoup(resp.raw_response.content.decode("utf-8", "ignore"), "lxml") #Should use lxml by default as long as lxml is installed in environment.
-        if (is_high_quality_page(soup_content) and is_valid(url)): #check if page has lots of info or little and valid url
+        if (is_high_quality_page(soup_content)): #check if page has lots of info or little and valid url
             for hyperlink in soup_content.find_all('a'): #get all the a tags inside html document
                 hyperlink_href = hyperlink.get('href') #get out the link
                 if (is_valid(hyperlink_href) and hyperlink_href != resp.url): #see if each link within the url is valid and not the same as link above
