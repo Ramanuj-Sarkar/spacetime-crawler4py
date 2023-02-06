@@ -44,7 +44,7 @@ def token_print(frequencies):
 
 def write_data(file_name, frequencies, most_words):
     #f = open(file_name, "w")
-    print("This is the website with the most words: " + most_words[1])
+    print("This is the website with the most words: ")
     double_sorted = sorted(sorted(frequencies.items(), key=(lambda x: x[0])), key=(lambda x: x[1]), reverse=True)
     for key, value in double_sorted[:50]:
         print(key, value, sep = ' - ')
