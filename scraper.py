@@ -100,4 +100,3 @@ def is_high_quality_page(soup_content):
     if (token_sum <= bad_count): #see the quality count
         return False
     return True
-y
