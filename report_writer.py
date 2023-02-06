@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 def grab_pages(log_path):
     pages = set()
     pattern = re.compile(r'https?://[\\w./]+')
-    with open("Worker.log", "r") as infile:
+    with open(log_path, "r") as infile:
         for line in infile:
             match = pattern.search(line)
             if match:
@@ -34,7 +34,7 @@ def gather_words(pages):
         totalWords = sum(token_dict.values())
         if(totalWords > most_words[1]):      #checks if new page has more words than current max    
             most_words = [soup_content, totalWords]
-    return [frequencies, most_words]
+    return frequencies
 
 
 if __name__ == "__main__":
