@@ -6,6 +6,9 @@ import tokenizer
 from collections import defaultdict
 
 
+frequencies = defaultdict(int)
+most_words = ("", 0)
+
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
@@ -24,8 +27,7 @@ def extract_next_links(url, resp):
     #         resp.raw_response.content: the content of the page!
     # Return a list with the hyperlinks (as strings) scrapped from resp.raw_response.content
     links = []
-    frequencies = defaultdict(int)
-    most_words = ("", 0)
+    
 
     try: #catch any errors from urls
         if not(resp.status >= 200 and resp.status < 300 and resp.raw_response): #http status 200-299 is successful
@@ -33,6 +35,8 @@ def extract_next_links(url, resp):
             return [] #return an empty list  
         soup_content = BeautifulSoup(resp.raw_response.content.decode("utf-8", "ignore"), "lxml") #Should use lxml by default as long as lxml is installed in environment.
         if (is_high_quality_page(soup_content)): #check if page has lots of info or little and valid url
+            global frequencies
+            global most_words
             token_dict = tokenizer.compute_word_frequencies(tokenizer.tokenize(soup_content))
             frequencies = frequencies | token_dict   #combines new frequency dict with preexisting one
             totalWords = sum(token_dict.values())   #gets the sum of all the words in a single page
@@ -100,3 +104,11 @@ def is_high_quality_page(soup_content):
     if (token_sum <= bad_count): #see the quality count
         return False
     return True
+
+
+
+if __name__ == "__main__":
+    print("This is the website with the most words: ")
+    double_sorted = sorted(sorted(frequencies.items(), key=(lambda x: x[0])), key=(lambda x: x[1]), reverse=True)
+    for key, value in double_sorted[:50]:
+        print(key, value, sep = ' - ')
