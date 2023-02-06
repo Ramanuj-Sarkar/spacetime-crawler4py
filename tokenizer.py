@@ -47,7 +47,7 @@ def write_data(file_name, frequencies, most_words):
     double_sorted = sorted(sorted(frequencies.items(), key=(lambda x: x[0])), key=(lambda x: x[1]), reverse=True)
     for key, value in double_sorted[:50]:
         f.write(key, value, sep=' - ')
-    f.write(most_words)
+    f.write("This is the website with the most words: " + most_words)
     f.close()
 
 
