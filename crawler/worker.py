@@ -22,11 +22,11 @@ class Worker(Thread):
             tbd_url = self.frontier.get_tbd_url()
             if not tbd_url:
                 self.logger.info("Frontier is empty. Stopping Crawler.")
-                most_words_url = scraper.most_words;
-                self.logger.info(f"This website, {most_words_url[0]}, had the most words with {most_words_url[1]} this many words.")
-                self.logger.info("This is the website with the most words: ")
-                double_sorted = sorted(sorted(scraper.frequencies.items(), key=(lambda x: x[0])), key=(lambda x: x[1]), reverse=True)
-                for key, value in double_sorted[:50]:
+                most_words_url = scraper.most_words; #got global variable from scraper
+                self.logger.info(f"This website, {most_words_url[0]}, had the most words with {most_words_url[1]} this many words.")   #prints out information of url with most words
+                self.logger.info("This is the 50 most common words found throughout the scrape: ")
+                double_sorted = sorted(sorted(scraper.frequencies.items(), key=(lambda x: x[0])), key=(lambda x: x[1]), reverse=True) #sorts the frequency dictionary by decreasing order of the value
+                for key, value in double_sorted[:50]: #gets the 50 highest frequency words
                     self.logger.info(key, value, sep = ' - ')
                 break
             resp = download(tbd_url, self.config, self.logger)
