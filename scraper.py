@@ -6,8 +6,8 @@ import tokenizer
 from collections import defaultdict
 
 
-frequencies = defaultdict(int)
-most_words = ("", 0)
+frequencies = defaultdict(int)    # global variable to store the frequency of each word that appears in the url
+most_words = ("", 0)      #tuple to store the website url with the most words, as well as the amount of words that appear in that site
 
 
 def scraper(url, resp):
@@ -37,11 +37,11 @@ def extract_next_links(url, resp):
         if (is_high_quality_page(soup_content)): #check if page has lots of info or little and valid url
             global frequencies
             global most_words
-            token_dict = tokenizer.compute_word_frequencies(tokenizer.tokenize(soup_content))
+            token_dict = tokenizer.compute_word_frequencies(tokenizer.tokenize(soup_content)) #gets how many words are inside of the page
             frequencies = frequencies | token_dict   #combines new frequency dict with preexisting one
             totalWords = sum(token_dict.values())   #gets the sum of all the words in a single page
             if(totalWords > most_words[1]):      #checks if new page has more words than current max
-                most_words = (soup_content, totalWords)   #replaces most_words with new page if it has more words
+                most_words = (resp.raw_response.url, totalWords)   #replaces most_words with new page if it has more words
             for hyperlink in soup_content.find_all('a'): #get all the a tags inside html document
                 hyperlink_href = hyperlink.get('href') #get out the link
                 if (is_valid(hyperlink_href) and hyperlink_href != resp.url): #see if each link within the url is valid and not the same as link above
