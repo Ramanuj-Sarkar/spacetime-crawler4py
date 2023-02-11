@@ -107,8 +107,8 @@ def is_high_quality_page(soup_content):
 
 
 
-if __name__ == "__main__":
-    print("This is the website with the most words: ")
-    double_sorted = sorted(sorted(frequencies.items(), key=(lambda x: x[0])), key=(lambda x: x[1]), reverse=True)
-    for key, value in double_sorted[:50]:
-        print(key, value, sep = ' - ')
+# if __name__ == "__main__":
+#     print("This is the website with the most words: ")
+#     double_sorted = sorted(sorted(frequencies.items(), key=(lambda x: x[0])), key=(lambda x: x[1]), reverse=True)
+#     for key, value in double_sorted[:50]:
+#         print(key, value, sep = ' - ')
